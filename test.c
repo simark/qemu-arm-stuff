@@ -2,56 +2,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FLASH_SIZE (64 * 1024 * 1024)
-
 volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000;
 
-void print_uart0(const char *s) {
-    while(*s != '\0') { /* Loop until end of string */
-	*UART0DR = (unsigned int)(*s); /* Transmit char */
-	s++; /* Next char */
-    }
-}
-
+/* Symbols defined by linker script. */
 extern char flash_start;
 extern char heap_start;
 extern char heap_end;
+extern char __stack;
 
 int main() {
     char *buf;
     int i;
-    int *p = (int *) &flash_start;
-    const int num_ints = 20;
+    int *p ;
 
-    print_uart0("Salut!\n");
+    printf("Salut!\n");
 
-    sprintf(buf, "Heap start: %p\n", &heap_start);
-    print_uart0(buf);
+    printf("Heap start: %p\n", &heap_start);
+    printf("Heap end: %p\n", &heap_end);
+    printf("Flash address: %p\n", &flash_start);
+    printf("Stack base address: %p\n", &__stack);
+    printf("Local variable address: %p\n", &buf);
 
-    sprintf(buf, "Heap end: %p\n", &heap_end);
-    print_uart0(buf);
-
-    sprintf(buf, "Flash address: %p\n", flash_start);
-    print_uart0(buf);
-
-    for (i = 0; i < num_ints; i++) {
-	sprintf(buf, "Value %08x\n", p[i]);
-	print_uart0(buf);
+    p = (int *) &flash_start;
+    for (i = 0; i < 20; i++) {
+	printf("Flash value %d: %08x\n", i, p[i]);
     }
 
     buf = malloc(0x1000);
-    sprintf(buf, "Buf 1 address: %p\n", buf);
-    print_uart0(buf);
+    printf("Buf 1 address: %p\n", buf);
 
     buf = malloc(0x1000);
-    sprintf(buf, "Buf 2 address: %p\n", buf);
-    print_uart0(buf);
+    printf("Buf 2 address: %p\n", buf);
 
     free(buf);
 
     buf = malloc(0x1000);
-    sprintf(buf, "Buf 3 address: %p\n", buf);
-    print_uart0(buf);
+    printf("Buf 3 address: %p\n", buf);
+
+    return 0;
+}
+
+#define STDIN 0
+#define STDOUT 1
+#define STDERR 2
+
+int _write(int file, char *ptr, int len) {
+    if (file == STDOUT || file == STDERR) {
+	int i;
+
+	for (i = 0; i < len; i++) {
+	    *UART0DR = (unsigned int) ptr[i];
+	}
+    }
 
     return 0;
 }

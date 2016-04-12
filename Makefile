@@ -6,7 +6,7 @@ LD=$(ARCH)-ld
 OBJCOPY=$(ARCH)-objcopy
 CPU=arm926ej-s
 
-CFLAGS=-ffunction-sections -mcpu=$(CPU) -g
+CFLAGS=-ffunction-sections -mcpu=$(CPU) -g -Wall
 LDFLAGS=-T test.ld
 LIBS=-lc -lnosys
 
