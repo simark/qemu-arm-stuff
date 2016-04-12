@@ -9,7 +9,7 @@ MEMORY
 flash_start = ORIGIN(FLASH);
 
 /* Define heap size, used lower in this file. */
-heap_size = 4096;
+heap_size = 0x10000;
 
 /* Define stack base, used in newlib's crt0.S. */
 __stack = ORIGIN(SDRAM) + LENGTH(SDRAM);

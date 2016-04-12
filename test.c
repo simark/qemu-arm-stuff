@@ -39,8 +39,18 @@ int main() {
 	print_uart0(buf);
     }
 
-    buf = malloc(8888);
-    sprintf(buf, "Buf address: %p\n", buf);
+    buf = malloc(0x1000);
+    sprintf(buf, "Buf 1 address: %p\n", buf);
+    print_uart0(buf);
+
+    buf = malloc(0x1000);
+    sprintf(buf, "Buf 2 address: %p\n", buf);
+    print_uart0(buf);
+
+    free(buf);
+
+    buf = malloc(0x1000);
+    sprintf(buf, "Buf 3 address: %p\n", buf);
     print_uart0(buf);
 
     return 0;
