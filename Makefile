@@ -39,4 +39,4 @@ run-qemu-debug:
 
 .PHONY: run-gdb
 run-gdb:
-	arm-none-eabi-gdb test.elf -ex "tar rem :1234"
+	arm-none-eabi-gdb -nx test.elf -ex "tar rem :1234"
