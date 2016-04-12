@@ -7,11 +7,7 @@ MEMORY
 
 flash_start = ORIGIN(FLASH);
 
-stack_size = 4096;
 heap_size = 4096;
-
-_stack_start = ORIGIN(SRAM) + LENGTH(SRAM);
-_stack_end = _stack_start - stack_size;
 
 SECTIONS
 {
